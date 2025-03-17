@@ -1,0 +1,5 @@
+# This file configures the analyzer, which statically analyzes Dart code to
+analyzer:
+  plugins:
+    - custom_lint
+
