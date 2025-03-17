@@ -34,7 +34,7 @@ dev_dependencies:
     path: custom_lints
 
 flutter_gen:
-  output: lib/common/resources/gen
+  output: lib/core/resources/gen
   integrations:
     image: true
     flutter_svg: true

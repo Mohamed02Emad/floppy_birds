@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-extension WidgetExtention on Widget {
+extension WidgetPhysicsExtention on Widget {}
+
+extension WidgetDesignExtention on Widget {
   Widget margin(EdgeInsetsGeometry margin) {
     return Padding(
       padding: margin,
