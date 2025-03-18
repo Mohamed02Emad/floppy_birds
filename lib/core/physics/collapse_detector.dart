@@ -35,7 +35,9 @@ class CollapseDetector {
   void _checkCollision() {
     final targetRenderBox = _getRenderBox(targetKey);
     if (targetRenderBox != null) {
-      final targetRect = _getRect(targetRenderBox);
+      final targetRect = _getRect(
+        targetRenderBox,
+      );
       _checkObstaclesCollision(targetRect);
     }
   }
@@ -53,8 +55,11 @@ class CollapseDetector {
   bool _checkSingleObstacleCollision(Rect targetRect, GlobalKey key) {
     final otherRenderBox = _getRenderBox(key);
     if (otherRenderBox == null) return false;
-
-    final otherRect = _getRect(otherRenderBox);
+    final otherRect = _getRect(otherRenderBox, printLog: true);
+    final collapsed = _isCollision(targetRect, otherRect);
+    if (collapsed)
+      print(
+          'bird ${targetRect.top} ${targetRect.bottom} : towers ${otherRect.top} ${otherRect.bottom}');
     return _isCollision(targetRect, otherRect);
   }
 
@@ -66,9 +71,13 @@ class CollapseDetector {
     return key.currentContext?.findRenderObject() as RenderBox?;
   }
 
-  Rect _getRect(RenderBox renderBox) {
+  Rect _getRect(RenderBox renderBox, {bool printLog = false}) {
     final offset = renderBox.localToGlobal(Offset.zero);
     final size = renderBox.size;
-    return offset & size;
+    if (printLog) {
+      print("object size ${size.width}  ${size.height}");
+      print("object offset ${offset.dx}  ${offset.dy}");
+    }
+    return Rect.fromLTWH(offset.dx, offset.dy, size.width, size.height);
   }
 }

@@ -49,25 +49,66 @@ class _MethodVisitor extends RecursiveAstVisitor<void> {
 
   void _checkFunctionBody(FunctionBody body, TypeAnnotation? returnType) {
     final sourceRange = body.sourceRange;
-
-    // Get the line information from the source
     final lineInfo = resolver.lineInfo;
-    // Calculate the number of lines
+
     final startLine = lineInfo.getLocation(sourceRange.offset).lineNumber;
     final endLine = lineInfo.getLocation(sourceRange.end).lineNumber;
-    final lines = endLine - startLine + 1;
-    if (lines > MethodLineLimitLint.maxLines &&
+
+    final sourceText = resolver.source.contents.data;
+    final functionLines = _extractFunctionLines(sourceText, startLine, endLine);
+
+    final effectiveLines = _countEffectiveLines(functionLines);
+
+    if (effectiveLines > MethodLineLimitLint.maxLines &&
         returnType?.type?.getDisplayString() != "Widget") {
-      reporter.reportError(
-        error.AnalysisError.forValues(
-          source: resolver.source,
-          offset: body.offset,
-          length: body.length,
-          errorCode: MethodLineLimitLint._code,
-          message: '${MethodLineLimitLint._code.problemMessage} ($lines lines)',
-        ),
-      );
+      _reportError(body, effectiveLines);
     }
+  }
+
+  List<String> _extractFunctionLines(
+    String sourceText,
+    int startLine,
+    int endLine,
+  ) {
+    return sourceText.split('\n').sublist(startLine - 1, endLine);
+  }
+
+  int _countEffectiveLines(List<String> lines) {
+    return lines.where((line) => !_isCommentOrLog(line)).length;
+  }
+
+  bool _isCommentOrLog(String line) {
+    final trimmedLine = line.trim();
+    if (trimmedLine.isEmpty) {
+      return true;
+    }
+    if (trimmedLine.startsWith('//') ||
+        trimmedLine.startsWith('/*') ||
+        trimmedLine.startsWith('*')) {
+      return true;
+    }
+    if (trimmedLine.startsWith('print(') || trimmedLine.startsWith('log(')) {
+      return true;
+    }
+    // if (trimmedLine.contains('print(') || trimmedLine.contains('log(')) {
+    //   if (!trimmedLine.endsWith(');')) {
+    //     return true;
+    //   }
+    // }
+    return false;
+  }
+
+  void _reportError(FunctionBody body, int effectiveLines) {
+    reporter.reportError(
+      error.AnalysisError.forValues(
+        source: resolver.source,
+        offset: body.offset,
+        length: body.length,
+        errorCode: MethodLineLimitLint._code,
+        message:
+            '${MethodLineLimitLint._code.problemMessage} ($effectiveLines lines)',
+      ),
+    );
   }
 }
 

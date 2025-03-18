@@ -17,10 +17,10 @@ class Tower extends StatefulWidget {
       required this.id});
 
   @override
-  State<Tower> createState() => _TowerState();
+  State<Tower> createState() => TowerState();
 }
 
-class _TowerState extends State<Tower> {
+class TowerState extends State<Tower> {
   @override
   Widget build(BuildContext context) {
     final screenHeight = context.deviceHeight;
@@ -41,6 +41,7 @@ class _TowerState extends State<Tower> {
             initialOffset: upperTowerHeight,
             startAnimationDelay: Duration(milliseconds: 1000),
             child: Transform.scale(
+              key: widget.upperKey,
               scaleY: -1,
               child: Image.asset(
                 Assets.images.pipeGreen.path,
@@ -62,6 +63,7 @@ class _TowerState extends State<Tower> {
             initialOffset: lowerTowerHeight,
             startAnimationDelay: Duration(milliseconds: 1000),
             child: Image.asset(
+              key: widget.lowerKey,
               Assets.images.pipeGreen.path,
               height: lowerTowerHeight,
               width: 100,

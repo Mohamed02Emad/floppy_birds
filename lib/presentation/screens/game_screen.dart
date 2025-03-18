@@ -43,7 +43,6 @@ class _GameScreenState extends State<GameScreen> {
   Timer? timer;
 
   late final CollapseDetector collapseDetector;
-
   late final ScrollController scrollController;
 
   @override
@@ -58,10 +57,20 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   @override
+  void dispose() {
+    towers.dispose();
+    birdPosition.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        _applyVerticalForceOnBird();
+        _applyVerticalForceOnBird(-100);
+      },
+      onLongPress: () {
+        _applyVerticalForceOnBird(100);
       },
       child: Stack(
         children: [
@@ -88,21 +97,27 @@ class _GameScreenState extends State<GameScreen> {
             builder: (context, value, child) => Positioned(
               left: value?.dx ?? 100,
               top: value?.dy ?? context.deviceHeight * 0.5,
-              bottom: 0,
               child: Image.asset(
-                Assets.images.bird.path,
                 key: birdKey,
-                width: 45,
+                Assets.images.bird.path,
+                height: context.deviceHeight * 0.04,
+                fit: BoxFit.fitHeight,
               ),
             ),
           ),
           Positioned(
-              bottom: 0,
+              bottom: -80,
               left: 0,
               right: 0,
               child: Container(
                 key: groundKey,
-                height: 2,
+                height: 100,
+                child: Image.asset(
+                  Assets.images.base.path,
+                  height: 100,
+                  width: double.infinity,
+                  fit: BoxFit.fill,
+                ),
                 width: double.infinity,
               )),
           Positioned(
@@ -111,7 +126,7 @@ class _GameScreenState extends State<GameScreen> {
               right: 0,
               child: Container(
                 key: skyKey,
-                height: 2,
+                height: 100,
                 width: double.infinity,
               )),
         ],
@@ -162,8 +177,6 @@ class _GameScreenState extends State<GameScreen> {
     ];
   }
 
-  void _applyVerticalForceOnBird() {}
-
   void _checkTowersToRemove() {
     final List<Tower> towersToRemove = [];
     for (var tower in towers.value) {
@@ -192,9 +205,8 @@ class _GameScreenState extends State<GameScreen> {
 
   List<GlobalKey<State<StatefulWidget>>> _getTowersKeys() {
     return [
-      ...towers.value
-          .map((tower) => tower.key as GlobalKey<State<StatefulWidget>>)
-          .toList(),
+      ...towers.value.map((tower) => tower.lowerKey),
+      ...towers.value.map((tower) => tower.upperKey),
       groundKey,
       skyKey
     ];
@@ -208,6 +220,11 @@ class _GameScreenState extends State<GameScreen> {
     );
   }
 
+  void _applyVerticalForceOnBird(double force) {
+    birdPosition.value = Offset(
+        100, (birdPosition.value?.dy ?? context.deviceHeight / 2) + force);
+  }
+
   void stopGame() {
     if (timer != null && timer!.isActive) {
       timer!.cancel();
@@ -218,6 +235,7 @@ class _GameScreenState extends State<GameScreen> {
 
   void restart() {
     _startGeneratingTowers();
-    _initCollapseDetector();
+    _initBirdPosition();
+    collapseDetector.startDetecting();
   }
 }
