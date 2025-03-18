@@ -34,7 +34,7 @@ class _GameScreenState extends State<GameScreen> with GameScreenLogic {
   Widget build(BuildContext context) {
     return Scaffold(
       body: GestureDetector(
-        onTap: () {
+        onTap: () async {
           _applyVerticalForceOnBird(-100);
         },
         child: Stack(
@@ -43,17 +43,20 @@ class _GameScreenState extends State<GameScreen> with GameScreenLogic {
             Positioned.fill(
               child: ValueListenableBuilder(
                 valueListenable: towers,
-                builder: (context, value, child) => ListView.builder(
-                  padding: EdgeInsets.symmetric(horizontal: 250),
-                  controller: scrollController,
-                  scrollDirection: Axis.horizontal,
-                  itemCount: value.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: EdgeInsets.only(left: 200.0),
-                      child: value[index],
-                    );
-                  },
+                builder: (context, value, child) => IgnorePointer(
+                  ignoring: true,
+                  child: ListView.builder(
+                    padding: EdgeInsets.symmetric(horizontal: 250),
+                    controller: scrollController,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: value.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: EdgeInsets.only(left: 200.0),
+                        child: value[index],
+                      );
+                    },
+                  ),
                 ),
               ),
             ),
@@ -79,7 +82,7 @@ class _GameScreenState extends State<GameScreen> with GameScreenLogic {
                   width: double.infinity,
                 )),
             Positioned(
-                top: 0,
+                top: -80,
                 left: 0,
                 right: 0,
                 child: Container(
@@ -133,7 +136,6 @@ class _GameScreenState extends State<GameScreen> with GameScreenLogic {
   }
 
   void _onAddPoint() {
-    print('kkk');
     if (pointKeys.isNotEmpty) pointKeys.removeAt(0);
     score.value = score.value + 1;
     pointsDetector.updateObstacleList(pointKeys);
