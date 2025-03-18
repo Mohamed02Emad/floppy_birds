@@ -1,16 +1,3 @@
-# floppy_birds
+# Video
+https://github.com/user-attachments/assets/e40860c1-1ecc-4716-a5e1-67663c85c3f3
 
-floppy birds game in flutter
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
