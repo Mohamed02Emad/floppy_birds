@@ -26,8 +26,8 @@ class _TowerState extends State<Tower> {
     final screenHeight = context.deviceHeight;
     final safePathHeight = screenHeight * 0.24;
     final totalTowersHeight = screenHeight - safePathHeight;
-    final upperTowerHeight =
-        totalTowersHeight - (totalTowersHeight * (Random().nextInt(7) / 10));
+    final upperTowerHeight = totalTowersHeight -
+        totalTowersHeight * (((Random().nextInt(6) + 1) / 10));
     final lowerTowerHeight = totalTowersHeight - upperTowerHeight;
 
     return Column(
@@ -39,6 +39,7 @@ class _TowerState extends State<Tower> {
           child: SlideWrapper(
             slideDirection: SlideDirection.down,
             initialOffset: upperTowerHeight,
+            startAnimationDelay: Duration(milliseconds: 1000),
             child: Transform.scale(
               scaleY: -1,
               child: Image.asset(
@@ -59,6 +60,7 @@ class _TowerState extends State<Tower> {
           child: SlideWrapper(
             slideDirection: SlideDirection.up,
             initialOffset: lowerTowerHeight,
+            startAnimationDelay: Duration(milliseconds: 1000),
             child: Image.asset(
               Assets.images.pipeGreen.path,
               height: lowerTowerHeight,

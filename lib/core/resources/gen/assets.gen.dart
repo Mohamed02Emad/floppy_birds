@@ -16,12 +16,19 @@ class $AssetsImagesGen {
   AssetGenImage get backgroundDay =>
       const AssetGenImage('assets/images/background-day.png');
 
+  /// File path: assets/images/bird.png
+  AssetGenImage get bird => const AssetGenImage('assets/images/bird.png');
+
+  /// File path: assets/images/gameover.png
+  AssetGenImage get gameover =>
+      const AssetGenImage('assets/images/gameover.png');
+
   /// File path: assets/images/pipe-green.png
   AssetGenImage get pipeGreen =>
       const AssetGenImage('assets/images/pipe-green.png');
 
   /// List of all assets
-  List<AssetGenImage> get values => [backgroundDay, pipeGreen];
+  List<AssetGenImage> get values => [backgroundDay, bird, gameover, pipeGreen];
 }
 
 class $AssetsTranslationsGen {
