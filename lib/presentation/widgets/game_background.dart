@@ -11,7 +11,6 @@ class GameBackground extends StatelessWidget {
     final dayImage = Assets.images.backgroundDay;
     final int numberOfImages =
         (context.deviceWidth / (dayImage.size?.width ?? 288)).ceil();
-    print(numberOfImages.toString());
     return ListView.builder(
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),

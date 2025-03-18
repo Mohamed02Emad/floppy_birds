@@ -8,13 +8,13 @@ import 'package:flutter/material.dart';
 import '../../core/resources/gen/assets.gen.dart';
 
 class Tower extends StatefulWidget {
-  final GlobalKey upperKey, lowerKey;
-  final int id;
-  const Tower(
-      {super.key,
-      required this.upperKey,
-      required this.lowerKey,
-      required this.id});
+  final GlobalKey upperKey, lowerKey, pointKey;
+  const Tower({
+    super.key,
+    required this.upperKey,
+    required this.lowerKey,
+    required this.pointKey,
+  });
 
   @override
   State<Tower> createState() => TowerState();
@@ -53,6 +53,8 @@ class TowerState extends State<Tower> {
           ),
         ),
         SizedBox(
+          width: 1,
+          key: widget.pointKey,
           height: safePathHeight,
         ),
         FadeAppearWrapper(
