@@ -14,7 +14,9 @@ class CollapseDetector {
     required this.onCollapse,
   });
 
-  void updateObstacleList(List<GlobalKey> newObstacles) {
+  void updateObstacleList(
+    List<GlobalKey> newObstacles,
+  ) {
     obstacles
       ..clear()
       ..addAll(newObstacles);
@@ -46,7 +48,6 @@ class CollapseDetector {
     for (final key in obstacles) {
       if (_checkSingleObstacleCollision(targetRect, key)) {
         onCollapse();
-        stopDetecting();
         break;
       }
     }

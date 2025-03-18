@@ -4,9 +4,13 @@ import 'package:floppy_birds/core/extentions/context_extension.dart';
 import 'package:flutter/material.dart';
 
 extension WidgetGravityExtension on Widget {
-  Widget withGravityForce(ValueNotifier<Offset?> positionNotifier) {
+  Widget withGravityForce(
+    ValueNotifier<Offset?> positionNotifier, {
+    required ValueNotifier<bool> isPaused,
+  }) {
     return _GravityWidget(
       positionNotifier: positionNotifier,
+      isPaused: isPaused,
       child: this,
     );
   }
@@ -14,9 +18,11 @@ extension WidgetGravityExtension on Widget {
 
 class _GravityWidget extends StatefulWidget {
   final ValueNotifier<Offset?> positionNotifier;
+  final ValueNotifier<bool> isPaused;
   final Widget child;
 
   const _GravityWidget({
+    required this.isPaused,
     required this.positionNotifier,
     required this.child,
   });
@@ -27,7 +33,7 @@ class _GravityWidget extends StatefulWidget {
 
 class _GravityWidgetState extends State<_GravityWidget> {
   Timer? _timer;
-  final double gravity = 1;
+  final double gravity = 2.5;
   final double maxVelocity = 100.0;
 
   @override
@@ -44,6 +50,7 @@ class _GravityWidgetState extends State<_GravityWidget> {
 
   void _startGravitySimulation() {
     _timer = Timer.periodic(Duration(milliseconds: 16), (_) {
+      if (widget.isPaused.value) return;
       _updatePosition();
     });
   }
